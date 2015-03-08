@@ -20,16 +20,16 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     gameEngine = [[GameEngine alloc] init];
-    [self setRoundImage];
     self.roundImageOriginalPosition = self.roundImageView.center;
     self.imageViews = [NSArray arrayWithObjects:self.topLeftImageView, self.topMiddleImageView, self.topRightImageView, self.midLeftImageView, self.midMiddleImageView, self.midRightImageView, self.bottomLeftImageView, self.bottomMiddleImageView, self.bottomRightImageView, nil];
+    [self setRoundImage];
 }
 
 -(void)setRoundImage{
     if(gameEngine.ticTurn){
-        roundImageView.image = [UIImage imageNamed:@"x"];
+        roundImageView.image = [UIImage imageNamed:@"X"];
     } else {
-        roundImageView.image = [UIImage imageNamed:@"o"];
+        roundImageView.image = [UIImage imageNamed:@"O"];
     }
 }
 
@@ -56,7 +56,9 @@
 - (IBAction)onDrag:(UIPanGestureRecognizer *)sender {
     CGPoint currentPoint = [sender locationInView:self.view];
     if([sender state] == UIGestureRecognizerStateEnded){
+        NSLog(@"%f, %f", roundImageOriginalPosition.x, roundImageOriginalPosition.y);
         roundImageView.center = roundImageOriginalPosition;
+        NSLog(@"%f, %f", roundImageView.center.x, roundImageView.center.y);
         UIImageView *targetImageView = [self findImageViewUsingPoint: currentPoint];
         if(targetImageView && targetImageView.image == nil){
             targetImageView.image = roundImageView.image;
@@ -88,6 +90,8 @@
     for(UIImageView *imageView in imageViews){
         imageView.image = nil;
     }
+    gameEngine.ticTurn = true;
+    [self setRoundImage];
 }
 
 @end
